@@ -2,21 +2,20 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-/* Nav items per role — same icons as sidenav.php (ti-* Themify icons) */
 const NAV = {
   EMPLOYEE: [
-    { to: '/employee/dashboard', icon: 'ti-home', label: 'Dashboard', letter: 'D' },
-    { to: '/employee/create',    icon: 'ti-plus',    label: 'Create Voucher', letter: 'C' },
-    { to: '/employee/vouchers',  icon: 'ti-receipt', label: 'My Vouchers',    letter: 'V' },
+    { to: '/employee/dashboard', icon: 'fa-solid fa-house',       label: 'Dashboard' },
+    { to: '/employee/create',    icon: 'fa-solid fa-circle-plus', label: 'Create Voucher' },
+    { to: '/employee/vouchers',  icon: 'fa-solid fa-receipt',     label: 'My Vouchers' },
   ],
   DIRECTOR: [
-    { to: '/director/dashboard', icon: 'ti-home',       label: 'Dashboard',         letter: 'D' },
-    { to: '/director/pending',   icon: 'ti-time',        label: 'Pending Approvals', letter: 'P' },
-    { to: '/director/vouchers',  icon: 'ti-layout-list-thumb', label: 'All Vouchers', letter: 'V' },
+    { to: '/director/dashboard', icon: 'fa-solid fa-house',      label: 'Dashboard' },
+    { to: '/director/pending',   icon: 'fa-solid fa-clock',      label: 'Pending Approvals' },
+    { to: '/director/vouchers',  icon: 'fa-solid fa-list-check', label: 'All Vouchers' },
   ],
   ACCOUNTS: [
-    { to: '/accounts/dashboard', icon: 'ti-home',    label: 'Dashboard',   letter: 'D' },
-    { to: '/accounts/vouchers',  icon: 'ti-receipt', label: 'All Vouchers', letter: 'V' },
+    { to: '/accounts/dashboard', icon: 'fa-solid fa-house',   label: 'Dashboard' },
+    { to: '/accounts/vouchers',  icon: 'fa-solid fa-receipt', label: 'All Vouchers' },
   ],
 };
 
@@ -24,8 +23,8 @@ export default function Layout({ children, title }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [profileOpen, setProfileOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -35,158 +34,119 @@ export default function Layout({ children, title }) {
 
   const navItems = NAV[user?.role] || [];
   const initials = user?.email?.[0]?.toUpperCase() || '?';
-
   const isActive = (path) => location.pathname.startsWith(path);
 
   return (
-    <div id="pcoded" className="pcoded">
-      {/* Sidebar Overlay (Hidden by default, shown when sidebar is open on mobile) */}
-      <div 
-        className={`pcoded-overlay-box ${sidebarOpen ? 'd-block' : 'd-none'} d-lg-none`}
-        onClick={() => setSidebarOpen(false)}
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1026, transition: 'opacity 0.3s' }}
-      ></div>
-      <div className="pcoded-container navbar-wrapper">
+    <div className="min-h-screen bg-[#f3f3f3]">
 
-        {/* ══════════════════════════════════════
-            HEADER  — headernav.php structure
-        ══════════════════════════════════════ */}
-        <nav className="navbar header-navbar pcoded-header">
-          <div className="navbar-wrapper">
+      {/* Overlay — mobile only */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-            {/* Logo area — same dark bg as sidebar */}
-            <div className="navbar-logo">
-              <a
-                className="mobile-menu"
-                id="mobile-collapse"
-                href="#!"
-                onClick={(e) => { e.preventDefault(); setSidebarOpen(!sidebarOpen); }}
+      {/* ── SIDEBAR ── */}
+      <aside className={`fixed top-0 left-0 h-full w-[235px] bg-[#2c3e50] z-30 flex flex-col
+        transition-transform duration-300
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+      >
+        <div className="pt-[60px] overflow-y-auto flex-1">
+          {/* Role label */}
+          <div className="px-5 py-3 text-[13px] font-extrabold tracking-widest text-white/60 uppercase">
+            {user?.role}
+          </div>
+
+          {/* Nav links */}
+          <nav className="mt-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 px-5 py-3 text-[13.5px] no-underline border-l-[3px] transition-none
+                  ${isActive(item.to)
+                    ? 'text-white bg-[rgba(64,153,255,0.18)] border-[#4099ff]'
+                    : 'text-white/65 border-transparent hover:text-white hover:bg-white/[0.07]'
+                  }`}
               >
-                <i className="ti-menu"></i>
-              </a>
-              <Link to="#!" className="brand-text">
-                <i className="icofont icofont-briefcase" style={{ marginRight: 6 }}></i>
-                ExpenseVoucherMS
+                <i className={`${item.icon} w-5 text-center ${isActive(item.to) ? 'text-[#4099ff]' : ''}`}></i>
+                <span>{item.label}</span>
               </Link>
-            </div>
+            ))}
+          </nav>
+        </div>
+      </aside>
 
-            {/* Header nav items */}
-            <div className="navbar-container container-fluid">
-              <ul className="nav-left">
-                <li>
-                  <div className="sidebar_toggle">
-                    <a href="#!" onClick={(e) => { e.preventDefault(); setSidebarOpen(!sidebarOpen); }}>
-                      <i className="ti-menu"></i>
-                    </a>
-                  </div>
-                </li>
-              </ul>
+      {/* ── NAVBAR ── */}
+      <nav className="fixed top-0 left-0 right-0 h-[60px] bg-white shadow-sm z-40 flex items-stretch lg:pl-[235px]">
 
-              <ul className="nav-right">
-                {/* User Profile Dropdown */}
-                <li
-                  className={`user-profile header-notification${profileOpen ? ' open' : ''}`}
-                  onClick={() => setProfileOpen(!profileOpen)}
-                >
-                  <a href="#!" onClick={(e) => e.preventDefault()}>
-                    <div className="user-avatar-circle">{initials}</div>
-                    <span className="d-none d-sm-inline" style={{ fontSize: 13, color: '#666', marginLeft: 6 }}>
-                      {user?.email}
-                    </span>
-                    <i className="ti-angle-down" style={{ fontSize: 10, marginLeft: 4, color: '#999' }}></i>
-                  </a>
-                  <ul className="show-notification profile-notification">
-                    <li>
-                      <h6 style={{ padding: '10px 15px', margin: 0, borderBottom: '1px solid #f1f1f1', color: '#999', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase' }}>
-                        {user?.role}
-                      </h6>
-                    </li>
-                    <li>
-                      <a href="#!" onClick={handleLogout}>
-                        <i className="ti-layout-sidebar-left"></i> Logout
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-
-          </div>
-        </nav>
-
-        {/* ══════════════════════════════════════
-            MAIN CONTAINER  — template.php
-        ══════════════════════════════════════ */}
-        <div className="pcoded-main-container">
-          <div className="pcoded-wrapper">
-
-            {/* ══════════════════════════════════
-                SIDEBAR  — sidenav.php structure
-            ══════════════════════════════════ */}
-            <nav className={`pcoded-navbar${sidebarOpen ? ' open' : ''}`}>
-              <div className="pcoded-inner-navbar main-menu">
-                <div className="pcoded-navigatio-lavel">{user?.role}</div>
-                <ul className="pcoded-item pcoded-left-item">
-                  {navItems.map((item) => (
-                    <li key={item.to} className={isActive(item.to) ? 'active' : ''}>
-                      <Link to={item.to} onClick={() => setSidebarOpen(false)}>
-                        <span className="pcoded-micon">
-                          <i className={item.icon}></i>
-                          <b>{item.letter}</b>
-                        </span>
-                        <span className="pcoded-mtext">{item.label}</span>
-                        <span className="pcoded-mcaret"></span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </nav>
-
-            {/* ══════════════════════════════════
-                CONTENT AREA — template.php
-            ══════════════════════════════════ */}
-            <div className="pcoded-content">
-              <div className="pcoded-inner-content">
-                <div className="main-body">
-                  <div className="page-wrapper">
-
-                    {/* Breadcrumb / Page Header */}
-                    <div className="page-header">
-                      <div className="row align-items-center">
-                        <div className="col-md-6">
-                          <div className="page-header-title">
-                            <h5 className="m-b-0">{title}</h5>
-                          </div>
-                        </div>
-                        <div className="col-md-6">
-                          <ul className="breadcrumb justify-content-md-end">
-                            <li className="breadcrumb-item">
-                              <a href="#!">Home</a>
-                            </li>
-                            <li className="breadcrumb-item active">{title}</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Page Body — injected content */}
-                    <div className="page-body">
-                      {children}
-                    </div>
-
-                    {/* Style Selector placeholder */}
-                    <div id="styleSelector"></div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
+        {/* Dark brand block — full width on mobile, 235px on desktop */}
+        <div className="flex items-center px-5 gap-3 bg-[#2c3e50] text-white
+          absolute top-0 left-0 h-full w-full lg:w-[235px] z-50">
+          {/* Hamburger — mobile only */}
+          <button
+            className="lg:hidden text-white/80 text-xl bg-transparent border-none cursor-pointer p-0"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            <i className="fa-solid fa-bars-staggered"></i>
+          </button>
+          <span className="font-bold text-[17px] tracking-wide whitespace-nowrap">
+            <i className="icofont icofont-briefcase mr-2"></i>
+            ExpenseVoucherMS
+          </span>
         </div>
 
-      </div>
+        {/* Right: profile dropdown — z-[60] so it's above the dark brand block on mobile */}
+        <div className="ml-auto flex items-center pr-4 relative z-[60]">
+          <div
+            className="flex items-center gap-2 cursor-pointer select-none"
+            onClick={() => setProfileOpen(!profileOpen)}
+          >
+            <div className="w-[34px] h-[34px] rounded-full flex items-center justify-center font-bold text-sm text-white"
+              style={{ background: 'linear-gradient(45deg, #4099ff, #73b4ff)' }}>
+              {initials}
+            </div>
+            <span className="hidden sm:block text-[13px] text-[#666]">{user?.email}</span>
+            <i className="fa-solid fa-angle-down text-[10px] text-[#999]"></i>
+          </div>
+
+          {/* Dropdown */}
+          {profileOpen && (
+            <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-100 z-50">
+              <div className="px-4 py-2 text-[11px] font-bold tracking-widest text-[#999] uppercase border-b border-gray-100">
+                {user?.role}
+              </div>
+              <a href="#!" onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2.5 text-[13px] text-[#555] no-underline hover:bg-gray-50">
+                <i className="fa-solid fa-right-from-bracket"></i> Logout
+              </a>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* ── MAIN CONTENT ── */}
+      <main className="lg:ml-[235px] pt-[60px] min-h-screen">
+        <div className="p-5">
+
+          {/* Page header / breadcrumb */}
+          <div className="bg-white rounded-md shadow-sm px-5 py-4 mb-5 flex items-center justify-between">
+            <h5 className="m-0 text-[15px] font-bold text-[#444]">{title}</h5>
+            <nav className="text-[13px] text-[#888] flex items-center gap-1">
+              <a href="#!" className="text-[#4099ff] no-underline">Home</a>
+              <span className="mx-1">/</span>
+              <span>{title}</span>
+            </nav>
+          </div>
+
+          {/* Page content */}
+          {children}
+
+        </div>
+      </main>
+
     </div>
   );
 }

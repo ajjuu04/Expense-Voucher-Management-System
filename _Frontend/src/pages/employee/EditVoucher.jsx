@@ -5,6 +5,14 @@ import { getVoucher, updateVoucher } from '../../api';
 import { Loader } from '../../helpers';
 
 const CATEGORIES = ['Travel','Meals','Accommodation','Office Supplies','Entertainment','Medical','Training','Other'];
+const inputCls = (err) => `w-full border rounded px-3 py-2 text-[14px] text-[#555] outline-none focus:border-[#4099ff] ${err ? 'border-[#FF5370]' : 'border-[#e0e0e0]'}`;
+const Field = ({ label, required, error, children }) => (
+  <div className="mb-4">
+    <label className="block text-[13px] font-semibold text-[#555] mb-1">{label} {required && <span className="text-[#FF5370]">*</span>}</label>
+    {children}
+    {error && <p className="text-[#FF5370] text-xs mt-1">{error}</p>}
+  </div>
+);
 
 export default function EditVoucher() {
   const { id } = useParams();
@@ -19,24 +27,16 @@ export default function EditVoucher() {
     getVoucher(id).then(r => {
       const v = r.data;
       if (v.status !== 'DRAFT') { navigate(`/employee/vouchers/${id}`); return; }
-      setForm({
-        department: v.department || '',
-        expenseTitle: v.expenseTitle || '',
-        expenseCategory: v.expenseCategory || '',
-        expenseDescription: v.expenseDesc || '',
-        expenseDate: v.expDate || '',
-        amount: v.amount || '',
-      });
+      setForm({ department: v.department||'', expenseTitle: v.expenseTitle||'', expenseCategory: v.expenseCategory||'', expenseDescription: v.expenseDesc||'', expenseDate: v.expDate||'', amount: v.amount||'' });
     }).catch(() => {}).finally(() => setLoading(false));
   }, [id]);
 
   const validate = () => {
     const e = {};
-    if (!form.department.trim()) e.department = 'Department is required';
-    if (!form.expenseTitle.trim()) e.expenseTitle = 'Title is required';
-    if (!form.expenseDate) e.expenseDate = 'Date is required';
-    if (!form.amount) e.amount = 'Amount is required';
-    else if (parseFloat(form.amount) <= 0) e.amount = 'Amount must be > 0';
+    if (!form.department.trim()) e.department = 'Required';
+    if (!form.expenseTitle.trim()) e.expenseTitle = 'Required';
+    if (!form.expenseDate) e.expenseDate = 'Required';
+    if (!form.amount || parseFloat(form.amount) <= 0) e.amount = 'Must be > 0';
     return e;
   };
 
@@ -45,12 +45,9 @@ export default function EditVoucher() {
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setSaving(true); setApiErr('');
-    try {
-      await updateVoucher(id, { ...form, amount: parseFloat(form.amount) });
-      navigate(`/employee/vouchers/${id}`);
-    } catch (err) {
-      setApiErr(err.response?.data?.message || 'Update failed');
-    } finally { setSaving(false); }
+    try { await updateVoucher(id, { ...form, amount: parseFloat(form.amount) }); navigate(`/employee/vouchers/${id}`); }
+    catch (err) { setApiErr(err.response?.data?.message || 'Update failed'); }
+    finally { setSaving(false); }
   };
 
   const set = (k) => (e) => { setForm(f => ({ ...f, [k]: e.target.value })); setErrors(v => ({ ...v, [k]: '' })); };
@@ -60,72 +57,51 @@ export default function EditVoucher() {
 
   return (
     <Layout title="Edit Voucher">
-      <div className="row">
-        <div className="col-sm-12">
-          <div className="card">
-            <div className="card-header">
-              <h5>Edit Draft Voucher</h5>
-              <span className="d-block m-t-5 text-muted" style={{ fontSize: 12 }}>
-                Only DRAFT vouchers can be edited.
-              </span>
+      <div className="bg-white rounded-md shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h5 className="text-[14px] font-bold text-[#444] m-0">Edit Draft Voucher</h5>
+        </div>
+        <div className="p-5">
+          {apiErr && <div className="bg-red-50 border-l-4 border-[#FF5370] text-[#c0392b] px-4 py-3 rounded mb-4 text-sm">{apiErr}</div>}
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
+              <Field label="Department" required error={errors.department}>
+                <input type="text" className={inputCls(errors.department)} value={form.department} onChange={set('department')} />
+              </Field>
+              <Field label="Category" error={null}>
+                <select className={inputCls(false)} value={form.expenseCategory} onChange={set('expenseCategory')}>
+                  <option value="">Select category</option>
+                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </Field>
+              <div className="md:col-span-2">
+                <Field label="Expense Title" required error={errors.expenseTitle}>
+                  <input type="text" className={inputCls(errors.expenseTitle)} value={form.expenseTitle} onChange={set('expenseTitle')} />
+                </Field>
+              </div>
+              <Field label="Expense Date" required error={errors.expenseDate}>
+                <input type="date" className={inputCls(errors.expenseDate)} value={form.expenseDate} onChange={set('expenseDate')} />
+              </Field>
+              <Field label="Amount (₹)" required error={errors.amount}>
+                <input type="number" min="0.01" step="0.01" className={inputCls(errors.amount)} value={form.amount} onChange={set('amount')} />
+              </Field>
+              <div className="md:col-span-2">
+                <Field label="Description" error={null}>
+                  <textarea rows="3" className={inputCls(false)} value={form.expenseDescription} onChange={set('expenseDescription')} />
+                </Field>
+              </div>
             </div>
-            <div className="card-block">
-              {apiErr && <div className="alert alert-danger">{apiErr}</div>}
-              <form onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="department">Department <span className="text-danger">*</span></label>
-                      <input id="department" type="text" className={`form-control ${errors.department ? 'is-invalid' : ''}`} value={form.department} onChange={set('department')} />
-                      {errors.department && <div className="invalid-feedback">{errors.department}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="expenseCategory">Category</label>
-                      <select id="expenseCategory" className="form-control" value={form.expenseCategory} onChange={set('expenseCategory')}>
-                        <option value="">Select category</option>
-                        {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label htmlFor="expenseTitle">Expense Title <span className="text-danger">*</span></label>
-                      <input id="expenseTitle" type="text" className={`form-control ${errors.expenseTitle ? 'is-invalid' : ''}`} value={form.expenseTitle} onChange={set('expenseTitle')} />
-                      {errors.expenseTitle && <div className="invalid-feedback">{errors.expenseTitle}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="expenseDate">Expense Date <span className="text-danger">*</span></label>
-                      <input id="expenseDate" type="date" className={`form-control ${errors.expenseDate ? 'is-invalid' : ''}`} value={form.expenseDate} onChange={set('expenseDate')} />
-                      {errors.expenseDate && <div className="invalid-feedback">{errors.expenseDate}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="amount">Amount (₹) <span className="text-danger">*</span></label>
-                      <input id="amount" type="number" min="0.01" step="0.01" className={`form-control ${errors.amount ? 'is-invalid' : ''}`} value={form.amount} onChange={set('amount')} />
-                      {errors.amount && <div className="invalid-feedback">{errors.amount}</div>}
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label htmlFor="expenseDescription">Description</label>
-                      <textarea id="expenseDescription" className="form-control" rows="3" value={form.expenseDescription} onChange={set('expenseDescription')} />
-                    </div>
-                  </div>
-                </div>
-                <div className="form-group m-t-10">
-                  <button type="submit" className="btn btn-primary m-r-10" disabled={saving}>
-                    <i className="fa fa-save"></i> {saving ? 'Saving...' : 'Save Changes'}
-                  </button>
-                  <button type="button" className="btn btn-secondary" onClick={() => navigate(`/employee/vouchers/${id}`)}>Cancel</button>
-                </div>
-              </form>
+            <div className="flex gap-3 mt-2">
+              <button type="submit" disabled={saving}
+                className="btn-grad-primary text-white text-[13px] font-semibold px-5 py-2 rounded border-none cursor-pointer">
+                <i className="fa-solid fa-save mr-1"></i> {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+              <button type="button" onClick={() => navigate(`/employee/vouchers/${id}`)}
+                className="bg-[#e8e8e8] text-[#555] text-[13px] font-semibold px-5 py-2 rounded border-none cursor-pointer">
+                Cancel
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </Layout>

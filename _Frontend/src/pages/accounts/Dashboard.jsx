@@ -13,70 +13,38 @@ export default function AccDashboard() {
     getAllVouchers().then(r => setVouchers(r.data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const c = {
-    total:    vouchers.length,
-    pending:  vouchers.filter(v => v.status === 'PENDING').length,
-    approved: vouchers.filter(v => v.status === 'APPROVED').length,
-    rejected: vouchers.filter(v => v.status === 'REJECTED').length,
-    totalApproved: vouchers.filter(v => v.status === 'APPROVED').reduce((s, v) => s + v.amount, 0),
-  };
+  const c = { total: vouchers.length, pending: vouchers.filter(v => v.status==='PENDING').length, approved: vouchers.filter(v => v.status==='APPROVED').length, rejected: vouchers.filter(v => v.status==='REJECTED').length };
+  const totalApproved = vouchers.filter(v => v.status === 'APPROVED').reduce((s, v) => s + v.amount, 0);
 
   return (
     <Layout title="Accounts Dashboard">
-
-      <div className="row">
-        <div className="col-xl-3 col-md-6">
-          <div className="card bg-c-blue order-card">
-            <div className="card-block">
-              <h6 className="m-b-20">Total Vouchers</h6>
-              <h2 className="text-right"><i className="fa fa-file-text-o f-left"></i><span>{c.total}</span></h2>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-5">
+        {[
+          { label: 'Total Vouchers', value: c.total,    cls: 'bg-c-blue',   icon: 'fa-solid fa-file-lines' },
+          { label: 'Pending',        value: c.pending,  cls: 'bg-c-yellow', icon: 'fa-solid fa-clock' },
+          { label: 'Approved',       value: c.approved, cls: 'bg-c-green',  icon: 'fa-solid fa-check' },
+          { label: 'Rejected',       value: c.rejected, cls: 'bg-c-red',    icon: 'fa-solid fa-times' },
+        ].map(({ label, value, cls, icon }) => (
+          <div key={label} className={`${cls} rounded-md p-5 text-white`}>
+            <p className="text-[13px] font-semibold opacity-90 mb-2">{label}</p>
+            <div className="flex items-center justify-between">
+              <i className={`${icon} text-2xl opacity-70`}></i>
+              <span className="text-3xl font-bold">{value}</span>
             </div>
           </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
-          <div className="card bg-c-yellow order-card">
-            <div className="card-block">
-              <h6 className="m-b-20">Pending</h6>
-              <h2 className="text-right"><i className="fa fa-clock-o f-left"></i><span>{c.pending}</span></h2>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
-          <div className="card bg-c-green order-card">
-            <div className="card-block">
-              <h6 className="m-b-20">Approved</h6>
-              <h2 className="text-right"><i className="fa fa-check f-left"></i><span>{c.approved}</span></h2>
-            </div>
-          </div>
-        </div>
-        <div className="col-xl-3 col-md-6">
-          <div className="card bg-c-red order-card">
-            <div className="card-block">
-              <h6 className="m-b-20">Rejected</h6>
-              <h2 className="text-right"><i className="fa fa-times f-left"></i><span>{c.rejected}</span></h2>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
-      <div className="row">
-        <div className="col-md-12">
-          <div className="card">
-            <div className="card-block d-flex align-items-center justify-content-between">
-              <div>
-                <p className="detail-label m-b-5">Total Approved Amount</p>
-                <h2 className="amount-large m-b-0">{formatAmount(c.totalApproved)}</h2>
-              </div>
-              <div>
-                <button className="btn btn-primary" onClick={() => navigate('/accounts/vouchers')}>
-                  <i className="fa fa-list"></i> View All Vouchers
-                </button>
-              </div>
-            </div>
-          </div>
+      <div className="bg-white rounded-md shadow-sm p-5 flex items-center justify-between">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#aaa] mb-1">Total Approved Amount</p>
+          <p className="text-[26px] font-bold text-[#4099ff]">{formatAmount(totalApproved)}</p>
         </div>
+        <button onClick={() => navigate('/accounts/vouchers')}
+          className="btn-grad-primary text-white text-[13px] font-semibold px-5 py-2 rounded border-none cursor-pointer">
+          <i className="fa-solid fa-list mr-1"></i> View All Vouchers
+        </button>
       </div>
-
     </Layout>
   );
 }

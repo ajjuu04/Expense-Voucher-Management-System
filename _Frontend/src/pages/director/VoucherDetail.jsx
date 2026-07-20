@@ -21,177 +21,120 @@ export default function DirVoucherDetail() {
   useEffect(() => { load(); }, [id]);
 
   const handleSignature = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]; if (!file) return;
     setSigLoading(true); setMsg({});
-    try {
-      await uploadDirectorSignature(id, file);
-      setMsg({ type: 'success', text: 'Director signature uploaded!' });
-      load();
-    } catch (err) {
-      setMsg({ type: 'danger', text: err.response?.data?.message || 'Upload failed' });
-    } finally { setSigLoading(false); }
+    try { await uploadDirectorSignature(id, file); setMsg({ type: 'success', text: 'Director signature uploaded!' }); load(); }
+    catch (err) { setMsg({ type: 'danger', text: err.response?.data?.message || 'Upload failed' }); }
+    finally { setSigLoading(false); }
   };
 
   const handleApprove = async () => {
     setActionLoading(true); setMsg({});
-    try {
-      await approveVoucher(id);
-      setMsg({ type: 'success', text: 'Voucher approved successfully!' });
-      load();
-    } catch (err) {
-      setMsg({ type: 'danger', text: err.response?.data?.message || 'Approve failed' });
-    } finally { setActionLoading(false); }
+    try { await approveVoucher(id); setMsg({ type: 'success', text: 'Voucher approved!' }); load(); }
+    catch (err) { setMsg({ type: 'danger', text: err.response?.data?.message || 'Approve failed' }); }
+    finally { setActionLoading(false); }
   };
 
   const handleReject = async () => {
-    if (!rejectReason.trim()) { setRejectErr('Rejection reason is required'); return; }
+    if (!rejectReason.trim()) { setRejectErr('Reason is required'); return; }
     setActionLoading(true); setRejectModal(false); setMsg({});
-    try {
-      await rejectVoucher(id, rejectReason);
-      setMsg({ type: 'warning', text: 'Voucher rejected.' });
-      setRejectReason('');
-      load();
-    } catch (err) {
-      setMsg({ type: 'danger', text: err.response?.data?.message || 'Reject failed' });
-    } finally { setActionLoading(false); }
+    try { await rejectVoucher(id, rejectReason); setMsg({ type: 'warning', text: 'Voucher rejected.' }); setRejectReason(''); load(); }
+    catch (err) { setMsg({ type: 'danger', text: err.response?.data?.message || 'Reject failed' }); }
+    finally { setActionLoading(false); }
   };
 
   if (loading) return <Layout title="Voucher Detail"><Loader /></Layout>;
-  if (!v) return <Layout title="Voucher Detail"><div className="alert alert-danger">Voucher not found.</div></Layout>;
+  if (!v) return <Layout title="Voucher Detail"><div className="text-[#c0392b]">Voucher not found.</div></Layout>;
+
+  const alertCls = msg.type === 'success' ? 'bg-green-50 border-[#2ed8b6] text-[#16a085]'
+    : msg.type === 'warning' ? 'bg-yellow-50 border-[#FFB64D] text-[#d68910]'
+    : 'bg-red-50 border-[#FF5370] text-[#c0392b]';
 
   return (
     <Layout title="Voucher Detail">
-
       {msg.text && (
-        <div className={`alert alert-${msg.type} alert-dismissible`}>
-          <button type="button" className="close" onClick={() => setMsg({})}><span>&times;</span></button>
-          {msg.text}
+        <div className={`border-l-4 px-4 py-3 rounded mb-4 text-sm flex justify-between ${alertCls}`}>
+          <span>{msg.text}</span>
+          <button onClick={() => setMsg({})} className="bg-transparent border-none cursor-pointer font-bold">&times;</button>
         </div>
       )}
 
-      <div className="row">
-        {/* Details card */}
-        <div className="col-md-8">
-          <div className="card">
-            <div className="card-header">
-              <h5>
-                <span className="voucher-number mr-2">{v.voucherNumber}</span>
-                <StatusBadge status={v.status} />
-              </h5>
-              <span className="d-block m-t-5" style={{ fontSize: 13, color: '#666' }}>{v.expenseTitle}</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* Main details */}
+        <div className="lg:col-span-2 bg-white rounded-md shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <span className="font-mono bg-[#f0f4ff] text-[#4099ff] px-2 py-0.5 rounded text-[13px] font-bold">{v.voucherNumber}</span>
+              <StatusBadge status={v.status} />
             </div>
-            <div className="card-block">
-              <div className="row">
-                <div className="col-sm-6 m-b-15">
-                  <p className="detail-label">Employee</p>
-                  <p className="detail-value">{v.employee?.name} <small className="text-muted">({v.employee?.empId})</small></p>
+            <p className="text-[13px] text-[#666] mt-1">{v.expenseTitle}</p>
+          </div>
+          <div className="p-5">
+            <div className="grid grid-cols-2 gap-4">
+              {[['Employee', `${v.employee?.name||'—'} (${v.employee?.empId||''})`], ['Department', v.department], ['Category', v.expenseCategory], ['Expense Date', formatDate(v.expDate)]].map(([label, value]) => (
+                <div key={label} className="mb-2">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#aaa] mb-1">{label}</p>
+                  <p className="text-[15px] text-[#444] font-medium">{value || '—'}</p>
                 </div>
-                <div className="col-sm-6 m-b-15">
-                  <p className="detail-label">Department</p>
-                  <p className="detail-value">{v.department || '—'}</p>
-                </div>
-                <div className="col-sm-6 m-b-15">
-                  <p className="detail-label">Category</p>
-                  <p className="detail-value">{v.expenseCategory || '—'}</p>
-                </div>
-                <div className="col-sm-6 m-b-15">
-                  <p className="detail-label">Expense Date</p>
-                  <p className="detail-value">{formatDate(v.expDate)}</p>
-                </div>
-                <div className="col-sm-12 m-b-15">
-                  <p className="detail-label">Amount</p>
-                  <p className="amount-large">{formatAmount(v.amount)}</p>
-                </div>
-                {v.expenseDesc && (
-                  <div className="col-sm-12 m-b-15">
-                    <p className="detail-label">Description</p>
-                    <p className="detail-value" style={{ lineHeight: 1.7 }}>{v.expenseDesc}</p>
-                  </div>
-                )}
+              ))}
+            </div>
+            <div className="mb-4">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-[#aaa] mb-1">Amount</p>
+              <p className="text-[26px] font-bold text-[#4099ff]">{formatAmount(v.amount)}</p>
+            </div>
+            {v.employeeSignUrl && (
+              <div className="mb-4">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#aaa] mb-2">Employee Signature</p>
+                <img src={`http://localhost:8080${v.employeeSignUrl}`} alt="Employee Signature" className="max-h-[80px] border border-gray-200 rounded p-1" />
               </div>
-
-              {/* Employee signature */}
-              {v.employeeSignUrl && (
-                <div className="m-t-15">
-                  <p className="detail-label">Employee Signature</p>
-                  <img src={`http://localhost:8080${v.employeeSignUrl}`} alt="Employee Signature" className="sig-preview" />
-                </div>
-              )}
-
-              {/* Rejection reason */}
-              {v.status === 'REJECTED' && v.rejectReason && (
-                <div className="alert alert-danger m-t-15">
-                  <strong><i className="fa fa-times-circle"></i> Rejection Reason:</strong> {v.rejectReason}
-                </div>
-              )}
-
-              {/* Approval info */}
-              {v.status === 'APPROVED' && (
-                <div className="row m-t-15">
-                  <div className="col-sm-6">
-                    <p className="detail-label">Approved By</p>
-                    <p className="detail-value">{v.director?.name || '—'}</p>
-                  </div>
-                  <div className="col-sm-6">
-                    <p className="detail-label">Approval Date</p>
-                    <p className="detail-value">{formatDate(v.approvalDate)}</p>
-                  </div>
-                  {v.directorSignUrl && (
-                    <div className="col-sm-12 m-t-10">
-                      <p className="detail-label">Director Signature</p>
-                      <img src={`http://localhost:8080${v.directorSignUrl}`} alt="Director Signature" className="sig-preview" />
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            )}
+            {v.status === 'REJECTED' && v.rejectReason && (
+              <div className="bg-red-50 border-l-4 border-[#FF5370] text-[#c0392b] px-4 py-3 rounded text-sm mt-2">
+                <strong>Rejection Reason:</strong> {v.rejectReason}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right: Signature + Actions (only for PENDING) */}
+        {/* Right — only for PENDING */}
         {v.status === 'PENDING' && (
-          <div className="col-md-4">
-            {/* Director signature upload */}
-            <div className="card">
-              <div className="card-header"><h5>Director Signature</h5></div>
-              <div className="card-block">
-                <div className="sig-upload-box" onClick={() => fileRef.current.click()}>
-                  {v.directorSignUrl ? (
-                    <img src={`http://localhost:8080${v.directorSignUrl}`} alt="Director Signature" className="sig-preview" />
-                  ) : (
-                    <div className="text-muted m-b-10">
-                      <i className="fa fa-upload fa-2x d-block m-b-10"></i>
-                      <small>Click to upload your signature</small>
-                    </div>
-                  )}
-                  <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleSignature} />
-                  <button type="button" className="btn btn-secondary btn-sm m-t-5" disabled={sigLoading}
-                    onClick={(e) => { e.stopPropagation(); fileRef.current.click(); }}>
-                    {sigLoading ? 'Uploading...' : v.directorSignUrl ? 'Change Signature' : 'Upload Signature'}
+          <div className="flex flex-col gap-5">
+            {/* Director signature */}
+            <div className="bg-white rounded-md shadow-sm overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100">
+                <h5 className="text-[14px] font-bold text-[#444] m-0">Director Signature</h5>
+              </div>
+              <div className="p-5">
+                <div className="border-2 border-dashed border-gray-200 rounded-lg p-5 text-center cursor-pointer"
+                  onClick={() => fileRef.current.click()}>
+                  {v.directorSignUrl
+                    ? <img src={`http://localhost:8080${v.directorSignUrl}`} alt="Director Sig" className="max-h-[80px] mx-auto mb-3" />
+                    : <div className="text-[#aaa] mb-3"><i className="fa-solid fa-upload text-2xl block mb-2"></i><small>Click to upload</small></div>
+                  }
+                  <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleSignature} />
+                  <button type="button" disabled={sigLoading}
+                    className="bg-[#e8e8e8] text-[#555] text-[12px] font-semibold px-3 py-1 rounded border-none cursor-pointer mt-2"
+                    onClick={e => { e.stopPropagation(); fileRef.current.click(); }}>
+                    {sigLoading ? 'Uploading...' : v.directorSignUrl ? 'Change' : 'Upload Signature'}
                   </button>
                 </div>
                 {!v.directorSignUrl && (
-                  <small className="text-warning d-block m-t-10">
-                    <i className="fa fa-exclamation-triangle"></i> Upload signature before approving
-                  </small>
+                  <p className="text-[#FFB64D] text-xs mt-2"><i className="fa-solid fa-triangle-exclamation mr-1"></i>Upload before approving</p>
                 )}
               </div>
             </div>
 
-            {/* Approve / Reject actions */}
-            <div className="card">
-              <div className="card-header"><h5>Actions</h5></div>
-              <div className="card-block">
-                <button
-                  className="btn btn-success btn-block m-b-10"
-                  onClick={handleApprove}
-                  disabled={actionLoading || !v.directorSignUrl}
-                >
-                  <i className="fa fa-check"></i> {actionLoading ? 'Processing...' : 'Approve Voucher'}
+            {/* Actions */}
+            <div className="bg-white rounded-md shadow-sm overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100"><h5 className="text-[14px] font-bold text-[#444] m-0">Actions</h5></div>
+              <div className="p-5 flex flex-col gap-3">
+                <button onClick={handleApprove} disabled={actionLoading || !v.directorSignUrl}
+                  className="btn-grad-success w-full text-white text-[13px] font-semibold py-2 rounded border-none cursor-pointer disabled:opacity-50">
+                  <i className="fa-solid fa-check mr-1"></i> {actionLoading ? 'Processing...' : 'Approve Voucher'}
                 </button>
-                <button className="btn btn-danger btn-block" onClick={() => setRejectModal(true)} disabled={actionLoading}>
-                  <i className="fa fa-times"></i> Reject Voucher
+                <button onClick={() => setRejectModal(true)} disabled={actionLoading}
+                  className="btn-grad-danger w-full text-white text-[13px] font-semibold py-2 rounded border-none cursor-pointer">
+                  <i className="fa-solid fa-times mr-1"></i> Reject Voucher
                 </button>
               </div>
             </div>
@@ -199,35 +142,27 @@ export default function DirVoucherDetail() {
         )}
       </div>
 
-      {/* Reject Modal */}
+      {/* Reject modal */}
       {rejectModal && (
-        <div className="modal-overlay" onClick={() => setRejectModal(false)}>
-          <div className="modal-dialog-custom" onClick={e => e.stopPropagation()}>
-            <div className="modal-title">Reject Voucher</div>
-            <p className="text-muted m-b-15" style={{ fontSize: 13 }}>
-              Provide a reason for rejection. The employee will see this.
-            </p>
-            <div className="form-group">
-              <label>Rejection Reason <span className="text-danger">*</span></label>
-              <textarea
-                className={`form-control ${rejectErr ? 'is-invalid' : ''}`}
-                rows="3"
-                placeholder="e.g. Missing receipt, amount exceeds policy…"
-                value={rejectReason}
-                onChange={e => { setRejectReason(e.target.value); setRejectErr(''); }}
-              />
-              {rejectErr && <div className="invalid-feedback">{rejectErr}</div>}
-            </div>
-            <div className="text-right m-t-15">
-              <button className="btn btn-secondary mr-2" onClick={() => setRejectModal(false)}>Cancel</button>
-              <button className="btn btn-danger" onClick={handleReject}>
-                <i className="fa fa-times"></i> Confirm Reject
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setRejectModal(false)}>
+          <div className="bg-white rounded-lg p-6 w-full max-w-[420px] shadow-xl" onClick={e => e.stopPropagation()}>
+            <h5 className="text-[17px] font-bold text-[#444] mb-3">Reject Voucher</h5>
+            <p className="text-[13px] text-[#999] mb-4">Provide a reason — the employee will see this.</p>
+            <textarea rows="3" placeholder="e.g. Missing receipt, amount exceeds policy…"
+              value={rejectReason} onChange={e => { setRejectReason(e.target.value); setRejectErr(''); }}
+              className={`w-full border rounded px-3 py-2 text-[14px] text-[#555] outline-none focus:border-[#4099ff] ${rejectErr ? 'border-[#FF5370]' : 'border-[#e0e0e0]'}`} />
+            {rejectErr && <p className="text-[#FF5370] text-xs mt-1">{rejectErr}</p>}
+            <div className="flex justify-end gap-3 mt-4">
+              <button onClick={() => setRejectModal(false)}
+                className="bg-[#e8e8e8] text-[#555] text-[13px] font-semibold px-4 py-2 rounded border-none cursor-pointer">Cancel</button>
+              <button onClick={handleReject}
+                className="btn-grad-danger text-white text-[13px] font-semibold px-4 py-2 rounded border-none cursor-pointer">
+                <i className="fa-solid fa-times mr-1"></i> Confirm Reject
               </button>
             </div>
           </div>
         </div>
       )}
-
     </Layout>
   );
 }

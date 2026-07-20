@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0c0eb7ce-3a95-4bf5-92f7-a657c7e7cf57" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/_Backend/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/public/favicon.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/public/icons.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/App.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/AuthContext.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/Layout.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/ProtectedRoute.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/api.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/assets/hero.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/assets/typescript.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/assets/vite.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/helpers.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/main.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/Login.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/accounts/AllVouchers.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/accounts/Dashboard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/accounts/VoucherDetail.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/director/AllVouchers.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/director/Dashboard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/director/PendingApprovals.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/director/VoucherDetail.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/employee/CreateVoucher.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/employee/Dashboard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/employee/EditVoucher.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/employee/MyVouchers.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/pages/employee/VoucherDetail.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/src/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Backend/_Frontend/tsconfig.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="com.intellij.jpb.JpaRepository" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/_Backend" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3GjfMRN1MxRc2gnt1ZMZT73xLHQ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.assignment.ExpenseVoucherMS.ExpenseVoucherMsApplication" />
+      <module name="ExpenseVoucherMS" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.24374.151" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.24374.151" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0c0eb7ce-3a95-4bf5-92f7-a657c7e7cf57" name="Changes" comment="" />
+      <created>1784489863105</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784489863105</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
