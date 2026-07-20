@@ -35,7 +35,7 @@ public class User {
     @Column(nullable = false, length = 20)
     private Role role;
 
-    @Column(name = "emp_code",length = 55,nullable = false)
+    @Column(name = "emp_code",length = 55)
     private String empId;
 
     @CreationTimestamp
