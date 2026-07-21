@@ -48,7 +48,7 @@ public class VoucherController {
         return ResponseEntity.ok(voucherService.getAllVoucherOfEmp(empId));
     }
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE','DIRECTOR','ACCOUNTS')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE','DIRECTOR','ACCOUNT_TEAM')")
     @GetMapping("/{id}")
     public ResponseEntity<Voucher> getVoucher(@PathVariable Long id){
         return ResponseEntity.ok(voucherService.getById(id));
@@ -96,7 +96,7 @@ public class VoucherController {
 
 
 
-    @PreAuthorize("hasAnyRole('DIRECTOR','ACCOUNTS')")
+    @PreAuthorize("hasAnyRole('DIRECTOR','ACCOUNT_TEAM')")
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Voucher>> getByStatus(@PathVariable VoucherStatus status) {
         return ResponseEntity.ok(voucherService.getByStatus(status));
@@ -130,7 +130,7 @@ public class VoucherController {
         return ResponseEntity.ok(voucherService.reject(id, directorId, request.getReason()));
     }
 //    DIRECTOR and ACCOUNTS serch
-    @PreAuthorize("hasAnyRole('DIRECTOR','ACCOUNTS')")
+    @PreAuthorize("hasAnyRole('DIRECTOR','ACCOUNT_TEAM')")
     @GetMapping
     public ResponseEntity<List<Voucher>> getAllVouchers() {
         return ResponseEntity.ok(voucherService.getAllVouchers());

@@ -13,7 +13,7 @@ const NAV = {
     { to: '/director/pending',   icon: 'fa-solid fa-clock',      label: 'Pending Approvals' },
     { to: '/director/vouchers',  icon: 'fa-solid fa-list-check', label: 'All Vouchers' },
   ],
-  ACCOUNTS: [
+  ACCOUNT_TEAM: [
     { to: '/accounts/dashboard', icon: 'fa-solid fa-house',   label: 'Dashboard' },
     { to: '/accounts/vouchers',  icon: 'fa-solid fa-receipt', label: 'All Vouchers' },
   ],

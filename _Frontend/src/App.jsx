@@ -41,9 +41,9 @@ export default function App() {
           <Route path="/director/vouchers/:id" element={<RoleRoute role="DIRECTOR"><DirVoucherDetail /></RoleRoute>} />
 
           {/* Accounts routes */}
-          <Route path="/accounts/dashboard" element={<RoleRoute role="ACCOUNTS"><AccDashboard /></RoleRoute>} />
-          <Route path="/accounts/vouchers" element={<RoleRoute role="ACCOUNTS"><AccAllVouchers /></RoleRoute>} />
-          <Route path="/accounts/vouchers/:id" element={<RoleRoute role="ACCOUNTS"><AccVoucherDetail /></RoleRoute>} />
+          <Route path="/accounts/dashboard" element={<RoleRoute role="ACCOUNT_TEAM"><AccDashboard /></RoleRoute>} />
+          <Route path="/accounts/vouchers" element={<RoleRoute role="ACCOUNT_TEAM"><AccAllVouchers /></RoleRoute>} />
+          <Route path="/accounts/vouchers/:id" element={<RoleRoute role="ACCOUNT_TEAM"><AccVoucherDetail /></RoleRoute>} />
 
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
