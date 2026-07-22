@@ -30,7 +30,7 @@ A full-stack web application for managing employee expense vouchers digitally. I
 ```bash
 cd ExpenseVoucherMS
 mvn clean install
-mvn spring-boot:run
+mvnw spring-boot:run 
 ```
 The backend runs at `http://localhost:8080`.
 

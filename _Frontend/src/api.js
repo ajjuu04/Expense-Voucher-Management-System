@@ -19,11 +19,10 @@ api.interceptors.response.use(
   }
 );
 
-// Auth
 export const login = (email, password) =>
   api.post('/api/auth/login', { email, password });
+export const createUser = (data) => api.post('/api/auth/register', data);
 
-// Vouchers
 export const createVoucher = (data) => api.post('/api/vouchers', data);
 export const getMyVouchers = () => api.get('/api/vouchers/my');
 export const getAllVouchers = () => api.get('/api/vouchers');

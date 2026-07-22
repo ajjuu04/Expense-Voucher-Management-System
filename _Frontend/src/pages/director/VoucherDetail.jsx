@@ -60,7 +60,6 @@ export default function DirVoucherDetail() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Main details */}
         <div className="lg:col-span-2 bg-white rounded-md shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
@@ -96,10 +95,8 @@ export default function DirVoucherDetail() {
           </div>
         </div>
 
-        {/* Right — only for PENDING */}
         {v.status === 'PENDING' && (
           <div className="flex flex-col gap-5">
-            {/* Director signature */}
             <div className="bg-white rounded-md shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100">
                 <h5 className="text-[14px] font-bold text-[#444] m-0">Director Signature</h5>
@@ -124,7 +121,6 @@ export default function DirVoucherDetail() {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="bg-white rounded-md shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100"><h5 className="text-[14px] font-bold text-[#444] m-0">Actions</h5></div>
               <div className="p-5 flex flex-col gap-3">
@@ -142,7 +138,6 @@ export default function DirVoucherDetail() {
         )}
       </div>
 
-      {/* Reject modal */}
       {rejectModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setRejectModal(false)}>
           <div className="bg-white rounded-lg p-6 w-full max-w-[420px] shadow-xl" onClick={e => e.stopPropagation()}>

@@ -93,6 +93,19 @@ export default function Login() {
           </button>
         </form>
 
+        {/* GitHub Repo Link */}
+        <div className="mt-6 text-center">
+          <a
+            href="https://github.com/ajjuu04/Expense-Voucher-Management-System"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[13px] text-[#666] hover:text-[#4099ff] transition-colors"
+          >
+            <i className="fa-brands fa-github mr-1"></i>
+            github repo : https://github.com/ajjuu04/Expense-Voucher-Management-System
+          </a>
+        </div>
+
       </div>
     </div>
   );

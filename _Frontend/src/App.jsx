@@ -14,6 +14,7 @@ import DirDashboard from './pages/director/Dashboard';
 import PendingApprovals from './pages/director/PendingApprovals';
 import DirAllVouchers from './pages/director/AllVouchers';
 import DirVoucherDetail from './pages/director/VoucherDetail';
+import CreateUser from './pages/director/CreateUser';
 
 import AccDashboard from './pages/accounts/Dashboard';
 import AccAllVouchers from './pages/accounts/AllVouchers';
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/director/pending" element={<RoleRoute role="DIRECTOR"><PendingApprovals /></RoleRoute>} />
           <Route path="/director/vouchers" element={<RoleRoute role="DIRECTOR"><DirAllVouchers /></RoleRoute>} />
           <Route path="/director/vouchers/:id" element={<RoleRoute role="DIRECTOR"><DirVoucherDetail /></RoleRoute>} />
+          <Route path="/director/create-user" element={<RoleRoute role="DIRECTOR"><CreateUser /></RoleRoute>} />
 
           {/* Accounts routes */}
           <Route path="/accounts/dashboard" element={<RoleRoute role="ACCOUNT_TEAM"><AccDashboard /></RoleRoute>} />

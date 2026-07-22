@@ -18,6 +18,12 @@ export default function DirDashboard() {
 
   return (
     <Layout title="Director Dashboard">
+      <div className="flex justify-end mb-4">
+        <button onClick={() => navigate('/director/create-user')}
+          className="btn-grad-primary text-white text-[13px] font-semibold px-4 py-2 rounded border-none cursor-pointer">
+          <i className="fa-solid fa-user-plus mr-2"></i> Create User
+        </button>
+      </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-5">
         {[
           { label: 'Total Vouchers', value: c.total,    cls: 'bg-c-blue',   icon: 'fa-solid fa-file-lines' },

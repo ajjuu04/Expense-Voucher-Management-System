@@ -62,7 +62,6 @@ export default function EmpVoucherDetail() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Main details */}
         <div className="lg:col-span-2 bg-white rounded-md shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
@@ -91,10 +90,8 @@ export default function EmpVoucherDetail() {
           </div>
         </div>
 
-        {/* Right column — only for DRAFT */}
         {v.status === 'DRAFT' && (
           <div className="flex flex-col gap-5">
-            {/* Signature upload */}
             <div className="bg-white rounded-md shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100">
                 <h5 className="text-[14px] font-bold text-[#444] m-0">Your Signature</h5>
@@ -119,7 +116,6 @@ export default function EmpVoucherDetail() {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="bg-white rounded-md shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100">
                 <h5 className="text-[14px] font-bold text-[#444] m-0">Actions</h5>

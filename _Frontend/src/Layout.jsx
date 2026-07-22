@@ -39,7 +39,6 @@ export default function Layout({ children, title }) {
   return (
     <div className="min-h-screen bg-[#f3f3f3]">
 
-      {/* Overlay — mobile only */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-20 lg:hidden"
@@ -47,18 +46,14 @@ export default function Layout({ children, title }) {
         />
       )}
 
-      {/* ── SIDEBAR ── */}
       <aside className={`fixed top-0 left-0 h-full w-[235px] bg-[#2c3e50] z-30 flex flex-col
         transition-transform duration-300
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
       >
         <div className="pt-[60px] overflow-y-auto flex-1">
-          {/* Role label */}
           <div className="px-5 py-3 text-[13px] font-extrabold tracking-widest text-white/60 uppercase">
             {user?.role}
           </div>
-
-          {/* Nav links */}
           <nav className="mt-1">
             {navItems.map((item) => (
               <Link
@@ -79,13 +74,9 @@ export default function Layout({ children, title }) {
         </div>
       </aside>
 
-      {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 h-[60px] bg-white shadow-sm z-40 flex items-stretch lg:pl-[235px]">
-
-        {/* Dark brand block — full width on mobile, 235px on desktop */}
         <div className="flex items-center px-5 gap-3 bg-[#2c3e50] text-white
           absolute top-0 left-0 h-full w-full lg:w-[235px] z-50">
-          {/* Hamburger — mobile only */}
           <button
             className="lg:hidden text-white/80 text-xl bg-transparent border-none cursor-pointer p-0"
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -98,7 +89,6 @@ export default function Layout({ children, title }) {
           </span>
         </div>
 
-        {/* Right: profile dropdown — z-[60] so it's above the dark brand block on mobile */}
         <div className="ml-auto flex items-center pr-4 relative z-[60]">
           <div
             className="flex items-center gap-2 cursor-pointer select-none"
@@ -112,7 +102,6 @@ export default function Layout({ children, title }) {
             <i className="fa-solid fa-angle-down text-[10px] text-[#999]"></i>
           </div>
 
-          {/* Dropdown */}
           {profileOpen && (
             <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-100 z-50">
               <div className="px-4 py-2 text-[11px] font-bold tracking-widest text-[#999] uppercase border-b border-gray-100">
@@ -127,11 +116,8 @@ export default function Layout({ children, title }) {
         </div>
       </nav>
 
-      {/* ── MAIN CONTENT ── */}
       <main className="lg:ml-[235px] pt-[60px] min-h-screen">
         <div className="p-5">
-
-          {/* Page header / breadcrumb */}
           <div className="bg-white rounded-md shadow-sm px-5 py-4 mb-5 flex items-center justify-between">
             <h5 className="m-0 text-[15px] font-bold text-[#444]">{title}</h5>
             <nav className="text-[13px] text-[#888] flex items-center gap-1">
@@ -140,10 +126,7 @@ export default function Layout({ children, title }) {
               <span>{title}</span>
             </nav>
           </div>
-
-          {/* Page content */}
           {children}
-
         </div>
       </main>
 
